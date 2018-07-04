@@ -7,6 +7,9 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 /**
  * Description of Campaña
  *
@@ -77,7 +80,7 @@ class Campanya extends CI_Controller {
             case 'cdrc': /* AJAX con los datos de la gráfica para los aspectos de la campaña */
                 $this->cargarResultadosGraficaCampaña($complementario);
                 break;
-            
+
             case 'exp': /* Exportar datos */
                 $this->exportarDatos($complementario);
                 break;
@@ -198,7 +201,6 @@ class Campanya extends CI_Controller {
                 $importesAspecto = 0;
                 $lineasAsp = $this->AspectoTieneLinea_model->getLineasAspecto($aspecto->id_aspecto);
                 if ($lineasAsp > 0) {
-//                if ($lineasAsp > 0) {
                     /*
                      * Para cada uno de los aspectos vemos su importe en las lineas asignadas
                      */
@@ -267,49 +269,6 @@ class Campanya extends CI_Controller {
 
         $importeTotalAspecto = array();
 
-
-//        if ($aspectos > 0) {
-//            /*
-//             * Recorremos todos los aspectos de la campaña si existen
-//             */
-//            foreach ($aspectos as $aspecto) {
-//                $importesAspecto = 0;
-//                $lineasAsp = $this->AspectoTieneLinea_model->getLineasAspecto($aspecto->id_aspecto);
-//                if ($lineasAsp > 0) {
-//                    /*
-//                     * Para cada uno de los aspectos vemos su importe en las lineas asignadas
-//                     */
-//                    foreach ($lineasAsp as $importe) {
-//                        /*
-//                         * Este es el importe total del aspecto para todas sus lineas
-//                         */
-//                        $importesAspecto += $importe->importe;
-//                        array_push($importeTotalAspecto, $importesAspecto);
-//                    }
-//                } else {
-//                    array_push($importeTotalAspecto, 0);
-//                }
-//                /*
-//                 * Este es el importe acumulado de todos los aspectos
-//                 */
-//                $importesAspectos += $importesAspecto;
-//            }
-//        }
-//
-//        $aspectosItems = array();
-//
-//        if ($items > 0) {
-//            /*
-//             * Recorremos los items de la campaña
-//             */
-//            foreach ($items as $item) {
-//                $aspectoItem = $this->Aspecto_model->getAspecto($item->fk_aspecto);
-//                /*
-//                 * Guardamos el nombre del aspecto al que está asociado el item
-//                 */
-//                array_push($aspectosItems, $aspectoItem->nombre);
-//            }
-//        }
         if ($aspectos > 0) {
             /*
              * Recorremos todos los aspectos de la campaña si existen
@@ -318,7 +277,6 @@ class Campanya extends CI_Controller {
                 $importesAspecto = 0;
                 $lineasAsp = $this->AspectoTieneLinea_model->getLineasAspecto($aspecto->id_aspecto);
                 if ($lineasAsp > 0) {
-//                if ($lineasAsp > 0) {
                     /*
                      * Para cada uno de los aspectos vemos su importe en las lineas asignadas
                      */
@@ -496,7 +454,7 @@ class Campanya extends CI_Controller {
 
         echo json_encode($infoGrafica);
     }
-    
+
     /**
      * Función que exporta a un fichero excel los datos
      * 
@@ -505,20 +463,118 @@ class Campanya extends CI_Controller {
      */
     private function exportarDatos($id_campanya) {
         $result = $this->Campanya_model->esportarDatos($id_campanya);
-        
-        var_dump($result);
-        
-//        foreach ($result as $resultado) {
-//            echo $resultado->email . " ";
-//            echo $resultado->fecha . " ";
-//            echo $resultado->tipo . " ";
-//            echo $resultado->genero . " ";
-//            echo $resultado->pais . " ";
-//            echo $resultado->localidad . " ";
-//            echo $resultado->grupoInteres . " ";
-//            echo $resultado->otroGrupoInteres . " ";
-//            echo $resultado->facturacion . "<br>";
+
+//        $i = 0;
+//
+//        $tamanyo = sizeof($result);
+        $keys = array_keys($result[0]);
+
+//        echo "<table><tr>";
+//
+//        foreach ($keys as $key) {
+//            echo "<td>";
+//            echo $key;
+//            echo "</td>";
 //        }
+//        echo "</tr>";
+//        while ($i < $tamanyo) {
+//            $values = array_values($result[$i]);
+//            echo "<tr>";
+//            foreach ($values as $value) {
+//                echo "<td>";
+//                echo $value;
+//                echo "</td>";
+//            }
+//            echo "</tr>";
+//            $i++;
+//        }
+
+        $spreadsheet = new Spreadsheet();
+        /*
+         * Establecemos las propiedades del documento
+         */
+        $spreadsheet->getProperties()->setCreator('Sogres-Mode ')
+                ->setLastModifiedBy($this->session->userdata('loginUsuario'))
+                ->setTitle('Resultados de la Campaña')
+                ->setSubject('Respuestas de la campaña lanzada')
+                ->setDescription('Se pueden ver las respuestas de los usuarios que han realizado la camapaña');
+
+        /*
+         * Añadimos estilo a la cabecera
+         */
+        $styleArray = array(
+            'font' => array('bold' => true,),
+            'alignment' => array(
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,),
+            'borders' => array('top' => array(
+                    'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,)),
+            'fill' => array(
+                'type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+                'rotation' => 90,
+                'startcolor' => array('argb' => 'FFA0A0A0',), 'endcolor' =>
+                array('argb' => 'FFFFFFFF',),));
+        $spreadsheet->getActiveSheet()->getStyle('A1:ZZ1')->applyFromArray($styleArray);
+
+        /*
+         * Ajustamos el ancho de las celdas en base a su contenido
+         */
+        foreach (range('A', 'ZZ') as $columnID) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)
+                    ->setAutoSize(true);
+        }
+
+        /*
+         * Cambiamos el nombre de la hoja
+         */
+        $spreadsheet->getActiveSheet()->setTitle('Resultados');
+        
+        $spreadsheet->getActiveSheet()
+                ->fromArray(
+                        $keys, // Cabeceras
+                        NULL, // Array values with this value will not be set
+                        'A1'         // Top left coordinate of the worksheet range where
+                        //    we want to set these values (default is A1)
+        );
+        $spreadsheet->getActiveSheet()
+                ->fromArray(
+                        $result, // Los datos de las encuestas
+                        NULL, // Array values with this value will not be set
+                        'A2'         // Top left coordinate of the worksheet range where
+                        //    we want to set these values (default is A1)
+        );
+
+
+
+        //$writer = new Xlsx($spreadsheet);
+
+        $filename = 'name-of-the-generated-file';
+
+        /* Here there will be some code where you create $spreadsheet */
+
+// redirect output to client browser
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+
+//        header('Content-Type: application/vnd.ms-excel');
+//        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
+        // header('Cache-Control: max-age=0');
+//        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+//        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
+//        header('Cache-Control: max-age=0');
+//
+//        $writer->save('php://output'); // download file 
+//        $spreadsheet = new Spreadsheet();
+//        $sheet = $spreadsheet->getActiveSheet();
+//        $sheet->setCellValue('A1', 'Hello World !');
+//
+//        $writer = new Xlsx($spreadsheet);
+//        $writer->save('hello world.xlsx');
+//        $writer->save('Excel/' . $filename . '.xlsx');
     }
 
     /**
