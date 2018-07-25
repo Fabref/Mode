@@ -120,7 +120,7 @@ class Campanya_model extends CI_Model {
     }
 
     /**
-     * Función con la vista y la consulta que exportara los datos de la campaña
+     * Función con consulta que exportara los datos de la campaña
      * 
      * @param int $id_campana El identificador de la campaña de la que vamos a exportar los datos
      * @return object Los datos de la campaña

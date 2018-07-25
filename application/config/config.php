@@ -25,7 +25,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $config['base_url'] = 'http://localhost/Mode/';
 //$config['base_url'] = 'http://www.starglob.com/Mode/';
-//$config['base_url'] = 'http://mode.sogres.es';
 
 /*
 |--------------------------------------------------------------------------

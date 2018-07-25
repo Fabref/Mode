@@ -149,7 +149,7 @@ class Campanya extends CI_Controller {
      */
     private function listarCampañas() {
 
-        if (empty($this->session->userdata('loginUsuario'))) {
+        if (empty($this->session->userdata('loginUsuario')) && empty($this->session->userdata('id_cliente'))) {
             $campanyas = $this->Campanya_model->getCampañas();
         } else {
             $campanyas = $this->Campanya_model->getCampañasCliente($this->session->userdata('id_cliente'));
@@ -444,8 +444,8 @@ class Campanya extends CI_Controller {
             $desviacion = $aspt->desviacion;
 
             $aspecto['nombre'] = $nombre;
-            $aspecto['media'] = $media;
-            $aspecto['desviacion'] = $desviacion;
+            $aspecto['media'] = number_format($media, 2);
+            $aspecto['desviacion'] = number_format($desviacion, 2);
 
             array_push($aspectosGrafica, $aspecto);
         }
@@ -464,30 +464,8 @@ class Campanya extends CI_Controller {
     private function exportarDatos($id_campanya) {
         $result = $this->Campanya_model->esportarDatos($id_campanya);
 
-//        $i = 0;
-//
-//        $tamanyo = sizeof($result);
         $keys = array_keys($result[0]);
 
-//        echo "<table><tr>";
-//
-//        foreach ($keys as $key) {
-//            echo "<td>";
-//            echo $key;
-//            echo "</td>";
-//        }
-//        echo "</tr>";
-//        while ($i < $tamanyo) {
-//            $values = array_values($result[$i]);
-//            echo "<tr>";
-//            foreach ($values as $value) {
-//                echo "<td>";
-//                echo $value;
-//                echo "</td>";
-//            }
-//            echo "</tr>";
-//            $i++;
-//        }
 
         $spreadsheet = new Spreadsheet();
         /*
@@ -528,7 +506,11 @@ class Campanya extends CI_Controller {
          * Cambiamos el nombre de la hoja
          */
         $spreadsheet->getActiveSheet()->setTitle('Resultados');
-        
+
+        /*
+         * Inclusión de los datos en la Hoja Excel.
+         */
+        //Cabecera
         $spreadsheet->getActiveSheet()
                 ->fromArray(
                         $keys, // Cabeceras
@@ -536,6 +518,7 @@ class Campanya extends CI_Controller {
                         'A1'         // Top left coordinate of the worksheet range where
                         //    we want to set these values (default is A1)
         );
+        //Conjunto de datos
         $spreadsheet->getActiveSheet()
                 ->fromArray(
                         $result, // Los datos de las encuestas
@@ -548,7 +531,7 @@ class Campanya extends CI_Controller {
 
         //$writer = new Xlsx($spreadsheet);
 
-        $filename = 'name-of-the-generated-file';
+        $filename = 'Exportacion_resultados';
 
         /* Here there will be some code where you create $spreadsheet */
 
@@ -559,22 +542,6 @@ class Campanya extends CI_Controller {
 
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
-
-//        header('Content-Type: application/vnd.ms-excel');
-//        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"'); 
-        // header('Cache-Control: max-age=0');
-//        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-//        header('Content-Disposition: attachment;filename="'. $filename .'.xlsx"');
-//        header('Cache-Control: max-age=0');
-//
-//        $writer->save('php://output'); // download file 
-//        $spreadsheet = new Spreadsheet();
-//        $sheet = $spreadsheet->getActiveSheet();
-//        $sheet->setCellValue('A1', 'Hello World !');
-//
-//        $writer = new Xlsx($spreadsheet);
-//        $writer->save('hello world.xlsx');
-//        $writer->save('Excel/' . $filename . '.xlsx');
     }
 
     /**

@@ -50,7 +50,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Clientes
+            Campañas
         </h1>
     </section>
 
@@ -89,7 +89,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
 
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Listado de clientes</h3>
+                        <h3 class="box-title">Listado de campañas</h3>
                     </div><!-- /.box-header -->
 
                     <div class="box-body"> 

@@ -22,12 +22,10 @@ class Recovery extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->library('Nif_Nie_Cif_Validator');
-        
-        $this->load->model('Administrador_model');
 
+        $this->load->model('Administrador_model');
     }
 
-    
     /**
      * Index que redirige a la funcion apropiada segun la accion solicitada
      * 
@@ -35,37 +33,35 @@ class Recovery extends CI_Controller {
      * @param type $complementario el paramero complementario, si existe
      */
     public function index($accion = FALSE, $complementario = FALSE) {
-        
+
         switch ($accion) {
-            
-            case 'cvsrc':     /* Carga la vista para solicitar la recuperacion de la contraseña */
+
+            case 'cvsrc': /* Carga la vista para solicitar la recuperacion de la contraseña */
                 $this->cargaVistaSolicitaRecuperacionContraseña();
                 break;
-            
-            case 'vnc':     /* Validar dni usuario */
+
+            case 'vnc': /* Validar dni usuario */
                 $this->validarDNIAdministrador();
                 break;
-            
-            case 'cvte':     /* Carga la vista de aviso de expiracion del token de recuperacion */
+
+            case 'cvte': /* Carga la vista de aviso de expiracion del token de recuperacion */
                 $this->cargarVistaTokenExpirado($complementario);
                 break;
-            
-            case 'cvicr':     /* Carga la vista para introducir la nueva contraseña desde el email de recuperacion */
+
+            case 'cvicr': /* Carga la vista para introducir la nueva contraseña desde el email de recuperacion */
                 $this->cargarVistaIntroducirContraseñaRecuperada($complementario);
                 break;
-            
-            case 'rc':     /* Gestiona la introduccion de la contraseña a recuperar */
+
+            case 'rc': /* Gestiona la introduccion de la contraseña a recuperar */
                 $this->recuperarContraseña();
                 break;
-            
         }
-        
     }
 
-    
     /*
      * Carga la vista para solicitar la recuperacion la contraseña del fisioterapeuta 
      */
+
     private function cargaVistaSolicitaRecuperacionContraseña() {
 
         $this->load->view('template/headerLogin');
@@ -73,88 +69,64 @@ class Recovery extends CI_Controller {
         $this->load->view('template/footerLogin');
     }
 
-    
     /*
      * Comprueba que el DNI introducido por el usuario sea un DNI correcto y que
      * exista en la base de datos un centro con dicho DNI
      */
+
     private function validarDNIAdministrador() {
 
-        $nifUsuario = strtoupper($this->input->post('nifRecuperarPass', TRUE));
-        
+//        $nifUsuario = strtoupper($this->input->post('emailRecuperarPass', TRUE));
+        $mail = strtoupper($this->input->post('emailRecuperarPass', TRUE));
+
         /* Comprueba si esta en blanco */
-        if ($nifUsuario == "") {
+        if ($mail == "") {
             $respuesta['error'] = True;
             $respuesta['mensaje'] = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp; El campo no puede ser vacio</div>';
-            
         } else {
-            /* Comprueba si es valido */
-            $result = $this->nif_nie_cif_validator->isValidCIF($nifUsuario);
-            if ($result !== TRUE) {
-                
-                /* Si no tiene el formato correcto */
-                if ($result === FALSE) {
-                    $respuesta['error'] = True;
-                    $respuesta['mensaje'] = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp; Formato incorrecto</div>';
-                
-                } else { /* Si el digito de control no es correcto */
-                    $respuesta['error'] = True;
-                    $respuesta['mensaje'] = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp; Digito de control incorrecto</div>';
+            /* Comprueba si existe el usuario */
+            if ($this->Administrador_model->existeAdministrador($mail) == null) {
+                $respuesta['error'] = True;
+                $respuesta['mensaje'] = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp; Usuario incorrecto</div>';
+            } else { /* Todo es correcto */
+
+                /* Crea el token y se almacena en la BD */
+                $token = $this->crearToken();
+
+                $tokenAlmacenado = $this->Administrador_model->guardarTokenRecuperacionPass($mail, $token);
+                if (!$tokenAlmacenado) {
+                    $error = True;
+                    $mensaje = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp; Error en la recuperaci&oacute;n</div>';
                 }
-                
-            } else {
-            
-                /* Comprueba si existe el usuario */
-                if ($this->Administrador_model->existeAdministrador($nifUsuario) == null) {
-                    $respuesta['error'] = True;
-                    $respuesta['mensaje'] = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp; DNI incorrecto</div>';
-        
-                } else { /* Todo es correcto */
 
-                    /*Crea el token y se almacena en la BD*/
-                    $token = $this->crearToken();
-
-                    $tokenAlmacenado = $this->Administrador_model->guardarTokenRecuperacionPass($nifUsuario, $token);
-                    if ( ! $tokenAlmacenado) {
-                        $error = True;
-                        $mensaje = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp; Error en la recuperaci&oacute;n</div>';
-
-                    }
-
-                    /* Envia el email con la url de recuperacion*/
-                    $infoUsuario = $this->Administrador_model->getInfoAdministrador($nifUsuario);
-                    $envioEmail = $this->enviarEmailRecoveryPass($infoUsuario);
-                    if ( ! $envioEmail) {
-                        $error = True;
-                        $mensaje = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp; Error en la recuperaci&oacute;n</div>';
-
-                    } else {
-                        $error = False;
-                        $mensaje = '<div class="alert alert-success"><p style="font-size:16px;" align="justified"><i class="icon fa fa-check">&nbsp;&nbsp; Correo electr&oacute;nico de recuperaci&oacute;n enviado. Compruebe tambi&eacute;n su carpeta de SPAM</p></div>';
-
-                    }
-
-                    $respuesta['error'] = $error;
-                    $respuesta['mensaje'] = $mensaje;
+                /* Envia el email con la url de recuperacion */
+                $infoUsuario = $this->Administrador_model->getInfoAdministrador($mail);
+                $envioEmail = $this->enviarEmailRecoveryPass($infoUsuario);
+                if (!$envioEmail) {
+                    $error = True;
+                    $mensaje = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp; Error en la recuperaci&oacute;n</div>';
+                } else {
+                    $error = False;
+                    $mensaje = '<div class="alert alert-success"><p style="font-size:16px;" align="justified"><i class="icon fa fa-check">&nbsp;&nbsp; Correo electr&oacute;nico de recuperaci&oacute;n enviado. Compruebe tambi&eacute;n su carpeta de SPAM</p></div>';
                 }
+
+                $respuesta['error'] = $error;
+                $respuesta['mensaje'] = $mensaje;
             }
         }
-        
+
         echo json_encode($respuesta);
-        
     }
-    
-    
+
     /**
      * Crea un token unico para cada usuario que intenta recuperar su contraseña
      * 
      * @return type el token creado
      */
     private function crearToken() {
-        return sha1(uniqid(rand(),true));
+        return sha1(uniqid(rand(), true));
     }
-    
-    
+
     /**
      * Configura y envia el email de recuperacion de la contraseña.
      * 
@@ -163,7 +135,7 @@ class Recovery extends CI_Controller {
     private function enviarEmailRecoveryPass($infoUsuario) {
         //cargamos la libreria email de ci
         $this->load->library("email");
- 
+
         //configuracion para Azure
         $configEmail = array(
             'protocol' => 'smtp',
@@ -176,15 +148,15 @@ class Recovery extends CI_Controller {
             'wordwrap' => TRUE,
             'charset' => 'utf-8',
             'newline' => "\r\n"
-        );    
- 
+        );
+
         //cargamos la configuración para enviar con gmail
         $this->email->initialize($configEmail);
- 
+
         $this->email->from('recovery@kineactiv.com', "KineActiv");
         $this->email->to($infoUsuario->mail);
         $this->email->subject($this->lang->line('msg_recuperacion_password'));
-        
+
         $html = '<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#d2d6de">
             <table width="480" cellpadding="0" cellspacing="0" border="0" bgcolor="#d2d6de" align="center" style="margin:0 auto">
             <tbody>
@@ -192,7 +164,7 @@ class Recovery extends CI_Controller {
                     <td align="center" valign="top" style="padding:40px 0px 0px 0px">
                         
                         
-                        <img src="http://www.kineactiv.com/images/logotras.png" >
+                        <img src="http://mode.sogres.es/dist/img/logotras.png" >
                         
                         <br>
                         <br>
@@ -216,7 +188,7 @@ class Recovery extends CI_Controller {
                                             <tbody>
                                                 <tr style="background-color: #009b82">
                                                     <td align="center" valign="middle" style="padding:5px 5px">
-                                                        <a href="http://localhost/KineActivCentro_v1.1/index.php/Recovery/index/cvicr/' . $infoUsuario->token_recuperar_pass.'" 
+                                                        <a href="http://localhost/KineActivCentro_v1.1/index.php/Recovery/index/cvicr/' . $infoUsuario->token_recuperar_pass . '" 
                                                             style="font-weight:500;font-size:17px;letter-spacing:0.025em;line-height:26px;color:#fff;font-family:\'Poppins\',sans-serif;text-decoration:none" target="_blank" data-saferedirecturl="#">
                                                             ' . $this->lang->line('msg_recuperar_password') . '
                                                         </a>
@@ -249,16 +221,14 @@ class Recovery extends CI_Controller {
             </tbody>
         </table>
         </table>';
-        
+
         $this->email->message($html);
- 
-        if($this->email->send()) {
+
+        if ($this->email->send()) {
             return TRUE;
         }
-        
     }
 
-    
     /**
      * Carga la vista para que el fisio introduzca la nueva contraseña en el sistema.
      * En caso de que el token de recuperacion haya expirado, redirige a la pantalla
@@ -267,14 +237,13 @@ class Recovery extends CI_Controller {
      * @param type $token el token de la recuperacion de la contraseña del usuario
      */
     private function cargarVistaIntroducirContraseñaRecuperada($token) {
-        
+
         $fechaTokenRecuperarPassword = $this->Administrador_model->getFechaTokenRecuperarPassByToken($token);
-        
+
         /* Si la fecha es null, es que el enlace de recuperacion ya no es valido */
         if ($fechaTokenRecuperarPassword == null) {
             $mensajeErrorToken = 'env';
             redirect('Recovery/index/cvte/' . $mensajeErrorToken, 'refresh');
-            
         } else {
             $horaActual = new DateTime("now");
 
@@ -284,42 +253,36 @@ class Recovery extends CI_Controller {
 
             if ($fechaTokenRecuperarPasswordMasTolerancia < $horaActual) {
                 $this->Administrador_model->resetearTokenRecuperacionPass($token);
-                
+
                 $mensajeErrorToken = "te";
                 redirect('Recovery/index/cvte/' . $mensajeErrorToken, 'refresh');
-
             } else {
                 $infoRecuperacion['token'] = $token;
 
                 $this->load->view('template/headerLogin');
                 $this->load->view('recovery/crearPasswordRecuperado', $infoRecuperacion);
                 $this->load->view('template/footerLogin');
-
             }
         }
-        
     }
-    
-    
+
     /**
      * Carga la vista que muestra el mensaje de que el token para cambiar la 
      * contraseña ha expirado.
      */
     private function cargarVistaTokenExpirado($mensajeErrorTokenRecuperacion) {
-        
+
         if ($mensajeErrorTokenRecuperacion === "env") {
             $infoError['mensajeErrorRecuperacion'] = $this->lang->line('msg_info_enlace_no_valido');
         } else {
             $infoError['mensajeErrorRecuperacion'] = $this->lang->line('msg_info_periodo_expirado');
         }
-        
+
         $this->load->view('template/headerLogin');
         $this->load->view('recovery/errorExpiracionToken', $infoError);
         $this->load->view('template/footerLogin');
-            
     }
-    
-    
+
     /**
      * Comprueba que las contraseñas introducidas por el usuario sean iguales y 
      * se la cambia al fisioterapeuta.
@@ -328,36 +291,31 @@ class Recovery extends CI_Controller {
         $token = $this->input->post('token', TRUE);
         $passwordNuevo1 = $this->input->post('passwordNuevo1', TRUE);
         $passwordNuevo2 = $this->input->post('passwordNuevo2', TRUE);
-        
+
         /* Comprueba que la contraseña no este vacia */
-        if (($passwordNuevo1 == "") || ($passwordNuevo2 == "")) { 
+        if (($passwordNuevo1 == "") || ($passwordNuevo2 == "")) {
             $respuesta['error'] = True;
             $respuesta['mensaje'] = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp;' . $this->lang->line('msg_error_passwords_en_blanco') . '</div>';
-            
-        /* Comprueba que la nueva contraseña sea la misma en ambos campos */
+
+            /* Comprueba que la nueva contraseña sea la misma en ambos campos */
         } else if (strcmp($passwordNuevo1, $passwordNuevo2) != 0) {
             $respuesta['error'] = True;
             $respuesta['mensaje'] = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp;' . $this->lang->line('msg_error_passwords_distintos') . '</div>';
-
         } else {
             $saltCentro = password_hash($passwordNuevo1, PASSWORD_DEFAULT);
             $passwordActualizado = $this->Administrador_model->actualizarContraseñaByToken($token, $saltCentro);
-            
+
             if ($passwordActualizado) {
                 $this->Administrador_model->resetearTokenRecuperacionPass($token);
                 $respuesta['error'] = False;
                 $respuesta['mensaje'] = '<div class="alert alert-success"><i class="icon fa fa-check">&nbsp;&nbsp;' . $this->lang->line('msg_password_cambiado_correctamente') . '</div>';
-            
-                
             } else {
                 $respuesta['error'] = True;
                 $respuesta['mensaje'] = '<div class="alert alert-danger"><i class="icon fa fa-ban">&nbsp;&nbsp;' . $this->lang->line('msg_error_cambiar_password') . '</div>';
-            
             }
-            
         }
-            
+
         echo json_encode($respuesta);
     }
-    
+
 }

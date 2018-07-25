@@ -52,7 +52,12 @@
         </div>
 
         <!-- Menu lateral de opciones -->
-        <ul class="sidebar-menu">    
+        <ul class="sidebar-menu"> 
+            <li class="treeview">
+                <a href="<?= base_url() ?>index.php/General/index/mp">
+                    <i class="fa fa-home"></i> <span>Inicio</span></i>
+                </a>
+            </li>
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-building"></i> <span>Campa&ntilde;a</span> <i class="fa fa-angle-left pull-right"></i>

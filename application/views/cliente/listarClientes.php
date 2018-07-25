@@ -58,11 +58,13 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                             <table id="tablaClientes" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th>Logo</th>
                                         <th>Nombre</th>
                                         <th>NIF</th>
                                         <th>Raz&oacute;n Social</th>
                                         <th>E-mail</th>    
                                         <th>Web</th> 
+                                        <th>Acciones</th> 
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,11 +72,17 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                     foreach ($clientes as $cliente) {
                                         ?>
                                         <tr class = "odd gradeX">
+                                            <td>
+                                                <?php if ($cliente->logo != NULL) { ?>
+                                                 <img src="<?= base_url() ?>LogosClientes/thumbs/<?php echo $cliente->logo; ?>">
+                                                <?php } else { echo "No existe Logotipo"; } ?>
+                                            </td>
                                             <td><a href="<?= base_url() ?>index.php/Cliente/index/selc/<?php echo $cliente->id_cliente; ?>"><?php echo $cliente->nombre; ?></a></td>
                                             <td><a href="<?= base_url() ?>index.php/Cliente/index/selc/<?php echo $cliente->id_cliente; ?>"><?php echo $cliente->nif; ?></a></td>
                                             <td><a href="<?= base_url() ?>index.php/Cliente/index/selc/<?php echo $cliente->id_cliente; ?>"><?php echo $cliente->razonSocial; ?></a></td>
                                             <td><a href="<?= base_url() ?>index.php/Cliente/index/selc/<?php echo $cliente->id_cliente; ?>"><?php echo $cliente->email; ?></a></td>
                                             <td><a href="<?= base_url() ?>index.php/Cliente/index/selc/<?php echo $cliente->id_cliente; ?>"><?php echo $cliente->web; ?></a></td>
+                                            <td><a title="Editar Cliente" href="<?= base_url() ?>index.php/Cliente/index/cvec/<?php echo $cliente->id_cliente;; ?>"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;</td>
                                         </tr>
                                         <?php
                                     }

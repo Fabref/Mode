@@ -91,6 +91,52 @@ class Cliente extends CI_Controller {
         $cliente['razonSocial'] = $this->input->post('rs', TRUE);
         $cliente['email'] = $this->input->post('email', TRUE);
         $cliente['web'] = $this->input->post('web', TRUE);
+        
+        /*
+         * Configuracion subida archivos.
+         */
+        $config['upload_path'] = './LogosClientes/';
+        $config['allowed_types'] = 'jpg|png';
+        $config['file_ext_tolower'] = TRUE;
+        $config['remove_spaces'] = TRUE;
+        $config['max_size'] = 2048;
+        $config['max_width'] = 1920;
+        $config['max_height'] = 1280;
+
+        /*
+         * Carga de la libreria
+         */
+        $this->load->library('upload', $config);
+
+        $fichero = "logo";
+        
+        /*
+         * Carga de ficheros
+         */
+        if (!$this->upload->do_upload($fichero)) {
+            $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ERROR);
+            $this->session->set_flashdata('mensaje', $this->upload->display_errors());
+            //echo $this->upload->display_errors();
+            redirect('Cliente/index/cvlc', 'refresh');
+            $cliente['logo'] = '';
+        } else {
+            $full_path = $this->upload->data();
+            $cliente['logo'] = $full_path['file_name'];
+
+            /*
+             * Tratamiento de la imagen
+             */
+            $config['image_library'] = 'gd2';
+            $config['source_image'] = $full_path['full_path'];
+            $config['new_image'] = './LogosClientes/thumbs/' . $full_path['file_name'];
+            $config['maintain_ratio'] = TRUE;
+            $config['width'] = 155;
+            $config['height'] = 100;
+
+            $this->load->library('image_lib', $config);
+
+            $this->image_lib->resize();
+        }
 
         $idcliente = $this->Cliente_model->insertarCliente($cliente);
         
@@ -146,7 +192,7 @@ class Cliente extends CI_Controller {
         $cliente['email'] = $data->email;
         $cliente['web'] = $data->web;
 
-        /* Actualiza las variables de sesion con los datos del paciente */
+        /* Actualiza las variables de sesion con los datos del cliente */
         $this->session->set_userdata('id_cliente', $cliente['id_cliente']);
         $this->session->set_userdata('nombreCliente', $cliente['nombre']);
         $this->session->set_userdata('nifCliente', $cliente['nif']);

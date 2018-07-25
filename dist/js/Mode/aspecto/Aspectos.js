@@ -26,7 +26,7 @@ $(document).ready(function () {
                 backgroundColor: 'rgb(255, 255, 255, 0)',
                 data: [{
                         x: 0,
-                        y: 0
+                        y: 5
                     }]
             };
 

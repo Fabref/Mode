@@ -33,18 +33,18 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
 
         <div class="box box-primary">
 
-            <?php echo form_open('Cliente/index/cc'); ?>
+            <?php echo form_open_multipart('Cliente/index/cc'); ?>
 
             <br>
 
             <div class="box-body">
                 <div class="form-group">
 
-                    <!--   Agrupacion Nombre y NIF  -->
+                    <!--   Agrupacion Nombre, NIF y Logo -->
                     <div class="row">
 
                         <!--   Campo Nombre   -->
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="col-xs-4 col-sm-4 col-md-4">
                             <label>Nombre del cliente</label>
                             <input name="nombre" id="nombre" type="text" 
                                    class="form-control" required
@@ -53,13 +53,20 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                         </div>
 
                         <!--   Campo nif   -->
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="col-xs-4 col-sm-4 col-md-4">
                             <label>NIF</label>
 
                             <input name="nif" id="nif" type="text" 
-                                       class="form-control" required
-                                       maxlength="9"
-                                       placeholder="">
+                                   class="form-control" required
+                                   maxlength="9"
+                                   placeholder="">
+                            <br>
+                        </div>
+
+                        <!-- Campo Logotipo -->
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <label>Foto: </label>
+                            <input type="file" class="form-control" id="logo" name="logo">
                             <br>
                         </div>
 
@@ -83,7 +90,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                    placeholder="email">
                             <br>
                         </div>
-                        
+
                         <div class="col-xs-4 col-sm-4 col-md-4">
                             <label>Web</label>
                             <input name="web" id="web" type="text" 

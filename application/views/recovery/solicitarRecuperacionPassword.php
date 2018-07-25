@@ -20,11 +20,11 @@
                 <!-- Mensaje introducir nuevo password -->
                 <p>Recuperar password</p>
 
-                <!-- Campo dni -->  
+                <!-- Campo email -->  
                 <div class="form-group">
                     <div class="form-group has-feedback">
-                        <input type="text" id="nifRecuperarPass" name="nifRecuperarPass" maxlength="9" class="form-control" required placeholder="DNI">
-                        <span class="fa fa-credit-card form-control-feedback"></span>
+                        <input type="email" id="emailRecuperarPass" name="emailRecuperarPass" class="form-control" required placeholder="Email">
+                        <span class="fa fa-at form-control-feedback"></span>
                     </div>
                 </div>
             
