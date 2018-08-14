@@ -87,8 +87,8 @@ class Login extends CI_Controller {
             $this->session->set_userdata('apellidosUsuario', $infoUsuario->apellidos);
             $this->session->set_userdata('fk_cliente', $infoUsuario->fk_cliente);
             $this->session->set_userdata('es_administrador', $infoUsuario->es_administrador);
-            $this->session->set_userdata('puede_editar', $infoUsuario->puede_editar);
-            $this->session->set_userdata('puede_consultar', $infoUsuario->puede_consultar);
+//            $this->session->set_userdata('puede_editar', $infoUsuario->puede_editar);
+//            $this->session->set_userdata('puede_consultar', $infoUsuario->puede_consultar);
             $this->session->set_userdata('mailUsuario', $mail);
             
             redirect('Usuario/index/mp', 'refresh');
@@ -107,8 +107,8 @@ class Login extends CI_Controller {
     public function cerrarSesion() {
         $this->session->sess_destroy();
 
-        $msg = "La sesi&oacute;n ha finalizado";
-        $this->session->set_flashdata('mensajeLogin', $msg);
+        //$msg = "La sesi&oacute;n ha finalizado";
+        $this->session->set_flashdata('mensajeLogin', "La sesi&oacute;n ha finalizado");
         redirect('Login/index', 'refresh');
     }
 

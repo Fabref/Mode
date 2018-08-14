@@ -35,6 +35,7 @@ class Campanya extends CI_Controller {
             $this->load->model('ItemVariable_model');
             $this->load->model('General_model');
             $this->load->model('AspectoTieneLinea_model');
+            $this->load->model('Usuario_model');
         }
     }
 
@@ -83,6 +84,18 @@ class Campanya extends CI_Controller {
 
             case 'exp': /* Exportar datos */
                 $this->exportarDatos($complementario);
+                break;
+
+            case 'cvpc': /* Carga la vista de los permisos de los usuarios de la campaña */
+                $this->listarPermisosUsuariosCampana($complementario, $complementario1);
+                break;
+
+            case 'cvep': /* Carga la vista del formulario para los permisos de los usuarios de la campaña */
+                $this->editarPermisosUsuariosCampana($complementario, $complementario1);
+                break;
+            
+            case 'gpu': /* Carga la vista del formulario para los permisos de los usuarios de la campaña */
+                $this->guardarPermisosUsuariosCampana($complementario, $complementario1);
                 break;
 
             default : /* No ejecutamos nada de momento */
@@ -145,6 +158,39 @@ class Campanya extends CI_Controller {
     }
 
     /**
+     * Función para listar los usuarios y sus permisos de una campaña. 
+     */
+    private function listarPermisosUsuariosCampana($id_campana, $fk_cliente) {
+
+        $usuarios = $this->Usuario_model->getUsuariosCliente($fk_cliente);
+
+        $data['id_campana'] = $id_campana;
+        $data['usuarios'] = $usuarios;
+
+        $permisosLectura = array();
+        $permisosEscritura = array();
+
+        foreach ($usuarios as $usuario) {
+            $permisoLectura = $this->Campanya_model->permisoLectura($usuario->id_usuario, $id_campana);
+            $permisoEscritura = $this->Campanya_model->permisoEscritura($usuario->id_usuario, $id_campana);
+            array_push($permisosEscritura, $permisoEscritura);
+            array_push($permisosLectura, $permisoLectura);
+        }
+
+        $data['permisosLectura'] = $permisosLectura;
+        $data['permisosEscritura'] = $permisosEscritura;
+        
+        $this->load->view('template/menuSuperior');
+        if (empty($this->session->userdata('loginUsuario'))) {
+            $this->load->view('template/menuLateral');
+        } else {
+            $this->load->view('template/menuLateralUsuarios');
+        }
+        $this->load->view('campanya/listarPermisosUsuariosCampanya', $data);
+        $this->load->view('template/footer');
+    }
+
+    /**
      * Función que carga la vista del listado de campañas
      */
     private function listarCampañas() {
@@ -153,6 +199,11 @@ class Campanya extends CI_Controller {
             $campanyas = $this->Campanya_model->getCampañas();
         } else {
             $campanyas = $this->Campanya_model->getCampañasCliente($this->session->userdata('id_cliente'));
+            if ($this->session->userdata('es_administrador') == 1) {
+//                $campanyas = $this->Campanya_model->getCampañasCliente($this->session->userdata('id_cliente'));
+                $this->session->set_userdata('puede_editar', 1);
+                $this->session->set_userdata('puede_consultar', 1);
+            }
         }
 
         $clientes = array();
@@ -337,7 +388,7 @@ class Campanya extends CI_Controller {
      * @param int $id_campanya La campaña a cambiar
      * @param int $estado El nuevo estado de la campaña
      */
-    public function cambiaEstadoCampaña($id_campanya, $estado) {
+    private function cambiaEstadoCampaña($id_campanya, $estado) {
         $dato['estado'] = $estado;
         $resultado = $this->Campanya_model->cambiaEstado($id_campanya, $dato);
 
@@ -355,11 +406,67 @@ class Campanya extends CI_Controller {
     }
 
     /**
+     * Función que carga la vista con el formulario para editar los permisos de los usuarios en la campaña
+     * 
+     * @param int $id_usuario El usuario al que se le van a asignar o eliminar permisos
+     * @param int $id_campanya El identificador de la campaña a la que le van a dar permisos al usuario
+     */
+    private function editarPermisosUsuariosCampana($id_usuario, $id_campanya) {
+        $data['id_usuario'] = $id_usuario;
+        $data['id_campanya'] = $id_campanya;
+
+        $this->load->view('template/menuSuperior');
+        if (empty($this->session->userdata('loginUsuario'))) {
+            $this->load->view('template/menuLateral');
+        } else {
+            $this->load->view('template/menuLateralUsuarios');
+        }
+        $this->load->view('campanya/editarPermisosUsuario', $data);
+        $this->load->view('template/footer');
+    }
+
+    /**
+     * Función que recoge los permisos de los usuarios en la campaña
+     * 
+     * @param int $id_usuario El usuario al que se le van a asignar o eliminar permisos
+     * @param int $id_campanya El identificador de la campaña a la que le van a dar permisos al usuario
+     */
+    private function guardarPermisosUsuariosCampana($id_usuario, $id_campanya) {
+
+
+        $permisos['permiso_escritura'] = $this->input->post('puede_editar', TRUE);
+        $permisos['permiso_lectura'] = $this->input->post('puede_consultar', TRUE);
+
+        $existe = $this->Campanya_model->existeUsuarioPermisosCampana($id_campanya, $id_usuario);
+
+        if ($existe) {
+            $actualizado = $this->Campanya_model->actualizaPermisosUsuarioCampana($id_campanya, $permisos);
+            if ($actualizado) {
+                $this->session->set_flashdata('mensaje', "Se han cambiado los permisos del usuario en la campa&ntilde;a");
+                $this->session->set_flashdata('tipoMensaje', MENSAJE_REALIZADO_OK);
+            } else {
+                $this->session->set_flashdata('mensaje', "No han cambiado los permisos del usuario en la campa&ntilde;a");
+                $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ERROR);
+            }
+        } else {
+            $permisos['fk_usuario'] = $id_usuario;
+            $permisos['fk_campana'] = $id_campanya;
+            $id = $this->Campanya_model->insertaPermisosUsuarioCampana($permisos);
+            if ($id == null) {
+                $this->session->set_flashdata('mensaje', "No se ha creado correctamente los permisos del usuario en la campa&ntilde;a");
+                $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ERROR);
+            }
+        }
+
+        redirect('Campanya/index/cvlc', 'refresh');
+    }
+
+    /**
      * Cargamos la vista con la gráfica de los resultados así como los aspectos, PRA y presupuestos
      * 
      * @param int $id_campana El identificador de la campaña a mostrar los resultados
      */
-    public function cargarResultadosCampaña($id_campana) {
+    private function cargarResultadosCampaña($id_campana) {
         $campana = $this->Campanya_model->getCampaña($id_campana);
         $items = array();
         $aspectos = $this->Aspecto_model->getAspectosCampaña($id_campana);

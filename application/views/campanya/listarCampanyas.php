@@ -127,15 +127,23 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                                         <a title="Editar Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvec/<?php echo $campanya->id_campana; ?>"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
                                                         <?php
                                                     } else {
-                                                        if ($this->session->userdata('puede_consultar') == 1) {
+                                                        if ($this->session->userdata('es_administrador') == 1) {
                                                             ?>
-                                                            <a title="Ver Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvvc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-eye"></i></a>&nbsp;&nbsp; 
-                                                            <?php
-                                                        }
-                                                        if ($this->session->userdata('puede_editar') == 1) {
-                                                            ?>
+                                                            <a title="Ver Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvvc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-eye"></i></a>&nbsp;&nbsp;
                                                             <a title="Editar Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvec/<?php echo $campanya->id_campana; ?>"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
+                                                            <a title="Permisos Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvpc/<?php echo $campanya->id_campana; ?>/<?php echo $campanya->fk_cliente; ?>"><i class="fa fa-users"></i></a>&nbsp;&nbsp;
                                                             <?php
+                                                        } else {
+                                                            if ($this->Campanya_model->permisoLectura($this->session->userdata('idUsuario'), $campanya->id_campana) == 1) {
+                                                                ?>
+                                                                <a title="Ver Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvvc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-eye"></i></a>&nbsp;&nbsp; 
+                                                                <?php
+                                                            }
+                                                            if ($this->Campanya_model->permisoEscritura($this->session->userdata('idUsuario'), $campanya->id_campana) == 1) {
+                                                                ?>
+                                                                <a title="Editar Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvec/<?php echo $campanya->id_campana; ?>"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
+                                                                <?php
+                                                            }
                                                         }
                                                     }
                                                     ?>  
@@ -165,14 +173,16 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                                         <a title="Borrar campa&ntilde;a" data-toggle="modal" data-href="<?= $urlEliminar1 ?>" data-target="#confirm-delete" href="#"><i class="fa fa-trash"></i></a>
                                                         <?php
                                                     } else {
-                                                        ?> 
-                                                        <a title="Ver Resultados" href="<?= base_url() ?>index.php/Campanya/index/cvrc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-area-chart"></i></a>&nbsp;&nbsp;
-                                                        <?php
-                                                        if ($this->session->userdata('puede_editar') == 1) {
+                                                        if ($this->Campanya_model->permisoLectura($this->session->userdata('idUsuario'), $campanya->id_campana) == 1) {
+                                                            ?> 
+                                                            <a title="Ver Resultados" href="<?= base_url() ?>index.php/Campanya/index/cvrc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-area-chart"></i></a>&nbsp;&nbsp;
+                                                            <?php
+                                                        }
+                                                        if ($this->Campanya_model->permisoEscritura($this->session->userdata('idUsuario'), $campanya->id_campana) == 1) {
                                                             ?>
                                                             <?php $urlEliminar1 = base_url() . "index.php/Campanya/index/cec/" . $campanya->id_campana . "/0"; ?>
                                                             <a title="Borrar campa&ntilde;a" data-toggle="modal" data-href="<?= $urlEliminar1 ?>" data-target="#confirm-delete" href="#"><i class="fa fa-trash"></i></a>
-                                                        <?php
+                                                            <?php
                                                         }
                                                     }
                                                     ?>
@@ -193,7 +203,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                         } else {
                             ?>
                             <div>
-                                <h5>&emsp; - No existen clientes en la Base de Datos</h5>
+                                <h5>&emsp; - No existen campañas en la Base de Datos</h5>
                             </div>
                             <?php
                         }

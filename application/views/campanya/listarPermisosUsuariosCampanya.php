@@ -31,7 +31,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Usuarios
+            Usuarios y sus permisos en la campaña
         </h1>
     </section>
 
@@ -80,7 +80,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
 
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Listado de Usuarios</h3>
+                        <h3 class="box-title">Listado de Usuarios y permisos</h3>
                     </div><!-- /.box-header -->
 
                     <div class="box-body"> 
@@ -95,35 +95,43 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                         <th>Nombre</th>
                                         <th>Apellidos</th>
                                         <th>E-mail</th>    
-                                        <th>Vinculado a</th> 
-                                        <th>Administrador</th> 
+                                        <th>Permiso Lectura</th> 
+                                        <th>Permiso Escritura</th> 
                                         <th>Acciones</th> 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
+                                    $i = 0;
                                     foreach ($usuarios as $usuario) {
                                         ?>
                                         <tr class = "odd gradeX">
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $usuario->login; ?></a></td>
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $usuario->nombre; ?></a></td>
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $usuario->apellidos; ?></a></td>
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $usuario->email; ?></a></td>
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $this->Cliente_model->getNombreCliente($usuario->fk_cliente); ?></a></td>
-                                            <td><?php if ($usuario->es_administrador == 1) { ?>
+                                            <td><?php echo $usuario->login; ?></a></td>
+                                            <td><?php echo $usuario->nombre; ?></a></td>
+                                            <td><?php echo $usuario->apellidos; ?></a></td>
+                                            <td><?php echo $usuario->email; ?></a></td>
+                                            <td>
+                                                <?php if ($permisosLectura[$i] == 1) { ?>
                                                     <i class="fa fa-check"></i>
                                                 <?php } else { ?>
                                                     <i class="fa fa-times"></i>
                                                 <?php } ?>
                                             </td>
-                                            <td><a title="Editar Usuario" href="<?= base_url() ?>index.php/Usuario/index/cveu/<?php echo $usuario->id_usuario; ?>"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
-                                                <?php if ($usuario->es_administrador == 0) { ?>
-                                                    <?php $urlEliminar1 = base_url() . "index.php/Usuario/index/eu/" . $usuario->id_usuario; ?>
-                                                    <a title="Eliminar Usuario" data-toggle="modal" data-href="<?= $urlEliminar1 ?>" data-target="#confirm-delete" href="#"><i class="fa fa-trash"></i></a>
+                                            
+                                            <td>
+                                                <?php if ($permisosEscritura[$i] == 1) { ?>
+                                                    <i class="fa fa-check"></i>
+                                                <?php } else { ?>
+                                                    <i class="fa fa-times"></i>
                                                 <?php } ?>
+                                            </td>
+                                            
+                                            <td>
+                                                <a title="Editar Permisos" href="<?= base_url() ?>index.php/Campanya/index/cvep/<?php echo $usuario->id_usuario; ?>/<?php echo $id_campana; ?>"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
                                             </td>
                                         </tr>
                                         <?php
+                                        $i++;
                                     }
                                     ?>
                                 </tbody>

@@ -8,7 +8,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Formulario Nuevo Usuario
+            Formulario Editar Usuario
         </h1>
     </section>
 
@@ -33,7 +33,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
 
         <div class="box box-primary">
 
-            <?php echo form_open('Usuario/index/cu'); ?>
+            <?php echo form_open('Usuario/index/au/' . $data->id_usuario); ?>
 
             <br>
 
@@ -90,7 +90,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                             <label>Nombre</label>
                             <input name="nombre" id="nombre" type="text" 
                                    class="form-control" required
-                                   placeholder="Nombre">
+                                   value="<?= $data->nombre ?>">
                             <br>
                         </div>
 
@@ -98,7 +98,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                             <label>Apellidos</label>
                             <input name="apellidos" id="apellidos" type="text" 
                                    class="form-control" required
-                                   placeholder="Apellidos">
+                                   value="<?= $data->apellidos ?>">
                             <br>
                         </div>
 
@@ -106,7 +106,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                             <label>E-mail</label>
                             <input name="email" id="email" type="email" 
                                    class="form-control" required
-                                   placeholder="xxx@yyy.com">
+                                   value="<?= $data->email ?>">
                             <br>
                         </div>
 

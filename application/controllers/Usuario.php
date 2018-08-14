@@ -42,7 +42,7 @@ class Usuario extends CI_Controller {
      * 
      * @param string $accion Abreviatura con la acción a realizar
      */
-    public function index($accion) {
+    public function index($accion, $complementario = FALSE) {
         switch ($accion) {
 
             /* Perfil usuario */
@@ -64,6 +64,18 @@ class Usuario extends CI_Controller {
 
             case 'cvlu': /* Carga la vista listar usuarios */
                 $this->listarUsuarios();
+                break;
+
+            case 'cveu': /* Edita el usuario */
+                $this->editarUsuario($complementario);
+                break;
+
+            case 'au': /* Guarda la edición del usuario */
+                $this->actualizarUsuario();
+                break;
+
+            case 'eu': /* Elimina un usuario */
+                $this->eliminarUsuario($complementario);
                 break;
 
             default : /* No ejecutamos nada de momento */
@@ -136,23 +148,8 @@ class Usuario extends CI_Controller {
         $usuario['email'] = $this->input->post('email', TRUE);
         $usuario['fk_cliente'] = $this->input->post('fk_cliente', TRUE);
 
-        if (empty($this->session->userdata('loginUsuario'))) {
-            $usuario['es_administrador'] = 1;
-            $usuario['puede_editar'] = 1;
-            $usuario['puede_consultar'] = 1;
-        } else {
-            $usuario['es_administrador'] = 0;
-            $puede_editar = $this->input->post('puede_editar', TRUE);
-            if (empty($puede_editar)) {
-                $puede_editar = 0;
-            }
-            $puede_consultar = $this->input->post('puede_consultar', TRUE);
-            if (empty($puede_consultar)) {
-                $puede_consultar = 0;
-            }
-            $usuario['puede_editar'] = $puede_editar;
-            $usuario['puede_consultar'] = $puede_consultar;
-        }
+        $usuario['es_administrador'] = 0;
+
 
         $existe = $this->Usuario_model->existeUsuario($usuario['login']);
 
@@ -178,8 +175,11 @@ class Usuario extends CI_Controller {
      */
     private function listarUsuarios() {
 
-        $data['usuarios'] = $this->Usuario_model->getUsuarios();
-
+        if (empty($this->session->userdata('loginUsuario'))) {
+            $data['usuarios'] = $this->Usuario_model->getUsuarios();
+        } else {
+            $data['usuarios'] = $this->Usuario_model->getUsuariosCliente($this->session->userdata('id_cliente'));
+        }
         $this->load->view('template/menuSuperior');
         if (empty($this->session->userdata('loginUsuario'))) {
             $this->load->view('template/menuLateral');
@@ -188,6 +188,72 @@ class Usuario extends CI_Controller {
         }
         $this->load->view('usuario/listarUsuarios', $data);
         $this->load->view('template/footer');
+    }
+
+    /**
+     * Función que carga la vista de la edición de usuario
+     */
+    private function editarUsuario($id_usuario) {
+
+        $data['data'] = $this->Usuario_model->cargarUsuario($id_usuario);
+        $data['clientes'] = $this->Cliente_model->getClientes();
+
+        $this->load->view('template/menuSuperior');
+        if (empty($this->session->userdata('loginUsuario'))) {
+            $this->load->view('template/menuLateral');
+        } else {
+            $this->load->view('template/menuLateralUsuarios');
+        }
+        $this->load->view('usuario/editarUsuario', $data);
+        $this->load->view('template/footer');
+    }
+
+    /**
+     * Función para editar un usuario identificado por su id. La comprobacion de los datos
+     * introducidos en el formulario se hace a traves del "form_validation"
+     * aunque aún no...
+     */
+    private function actualizarUsuario($id_usuario) {
+
+        $usuario['login'] = $this->input->post('login', TRUE);
+        $clave = $this->input->post('clave', TRUE);
+        $usuario['clave'] = password_hash($clave, PASSWORD_DEFAULT);
+        $usuario['nombre'] = $this->input->post('nombre', TRUE);
+        $usuario['apellidos'] = $this->input->post('apellidos', TRUE);
+        $usuario['email'] = $this->input->post('email', TRUE);
+        $usuario['fk_cliente'] = $this->input->post('fk_cliente', TRUE);
+
+        $usuario['es_administrador'] = 0;
+
+        $actualizado = $this->Usuario_model->actualizarUsuario($usuario, $id_usuario);
+
+        if (!$actualizado) {
+            $this->session->set_flashdata('mensaje', "No se ha podidco actualizar correctamente el usuario");
+            $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ERROR);
+        } else {
+            $this->session->set_flashdata('mensaje', "Se ha actualizado correctamente el usuario");
+            $this->session->set_flashdata('tipoMensaje', MENSAJE_REALIZADO_OK);
+        }
+
+        redirect('Usuario/index/cvlu', 'refresh');
+    }
+
+    /**
+     * Función para eliminar un usuario identificado por su id.
+     */
+    private function eliminarUsuario($id_usuario) {
+
+        $eliminado = $this->Usuario_model->eliminarUsuario($id_usuario);
+
+        if ($eliminado == FALSE) {
+            $this->session->set_flashdata('mensaje', "No se ha podidco eliminar el usuario");
+            $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ERROR);
+        } else {
+            $this->session->set_flashdata('mensaje', "Se ha eliminado correctamente el usuario");
+            $this->session->set_flashdata('tipoMensaje', MENSAJE_REALIZADO_OK);
+        }
+
+        redirect('Usuario/index/cvlu', 'refresh');
     }
 
 }

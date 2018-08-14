@@ -102,6 +102,66 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                     </div>
                     <br>
                     <br>
+                    
+                    
+                    <!-- Usuario Administrador -->
+                    <h2>Usuario Administrador para el Cliente</h2>
+                    <!--   Agrupacion Login, Clave -->
+                    <div class="row">
+
+                        <!--   Campo Login   -->
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <label>Login</label>
+                            <input name="login" id="login" type="email" 
+                                   class="form-control" required
+                                   placeholder="xxx@yyy.com">
+                            <br>
+                        </div>
+
+                        <!--   Campo Clave   -->
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <label>Clave</label>
+
+                            <input name="clave" id="clave" type="password" 
+                                   class="form-control" required>
+                            <br>
+                        </div>
+
+                    </div>
+
+                    <!--Agrupacion nombre, apellidos y mail--> 
+                    <div class="row">
+
+                        <!--   Campo Nombre   -->
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <label>Nombre</label>
+                            <input name="nombreUsuario" id="nombreUsuario" type="text" 
+                                   class="form-control" required
+                                   placeholder="Nombre">
+                            <br>
+                        </div>
+
+                        <!--   Campo Apellidos   -->
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <label>Apellidos</label>
+                            <input name="apellidos" id="apellidos" type="text" 
+                                   class="form-control" required
+                                   placeholder="Apellidos">
+                            <br>
+                        </div>
+
+                        <!--   Campo Email   -->
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <label>E-mail</label>
+                            <input name="email" id="email" type="email" 
+                                   class="form-control" required
+                                   placeholder="xxx@yyy.com">
+                            <br>
+                        </div>
+
+                    </div>
+                    <br>
+                    <br>
 
                     <!--   Boton 'guardar paciente'  -->
                     <div class="row">

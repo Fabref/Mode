@@ -8,7 +8,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Formulario Nuevo Usuario
+            Formulario Nueva Campa&ntilde;a
         </h1>
     </section>
 
@@ -33,51 +33,40 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
 
         <div class="box box-primary">
 
-            <?php echo form_open('Usuario/index/cu'); ?>
+            <?php echo form_open_multipart('Cliente/index/ac/' . $data->id_cliente); ?>
 
             <br>
 
             <div class="box-body">
                 <div class="form-group">
 
-                    <!--   Agrupacion Login, Clave y Cliente asociado  -->
+                    <!--   Agrupacion Nombre, NIF y Logo -->
                     <div class="row">
 
-                        <!--   Campo Login   -->
+                        <!--   Campo Nombre   -->
                         <div class="col-xs-4 col-sm-4 col-md-4">
-                            <label>Login</label>
-                            <input name="login" id="login" type="email" 
+                            <label>Nombre del cliente</label>
+                            <input name="nombre" id="nombre" type="text" 
                                    class="form-control" required
-                                   value="<?= $data->login ?>">
+                                   value="<?= $data->nombre ?>">
                             <br>
                         </div>
 
-                        <!--   Campo Clave   -->
+                        <!--   Campo nif   -->
                         <div class="col-xs-4 col-sm-4 col-md-4">
-                            <label>Clave</label>
+                            <label>NIF</label>
 
-                            <input name="clave" id="clave" type="password" 
-                                   class="form-control" required>
+                            <input name="nif" id="nif" type="text" 
+                                   class="form-control" required
+                                   maxlength="9"
+                                   value="<?= $data->nif ?>">
                             <br>
                         </div>
 
-                        <!--   Campo Cliente   -->
+                        <!-- Campo Logotipo -->
                         <div class="col-xs-4 col-sm-4 col-md-4">
-                            <label>Cliente</label>
-
-                            <select class="form-control" name="fk_cliente" id="fk_cliente">
-                                <?php
-                                if (isset($clientes)) {
-                                    foreach ($clientes as $cliente) {
-                                        ?>
-                                        <option value="<?= $cliente->id_cliente ?>" <?php if ($data->fk_cliente == $cliente->id_cliente) { ?> selected="true" <?php } ?>><?= $cliente->nombre ?></option>
-                                        <?php
-                                    }
-                                } else {
-                                    ?>
-                                    <option value="<?= $cliente->id_cliente ?>"><?= $cliente->nombre ?></option>
-                                <?php } ?>
-                            </select>
+                            <label>Foto: </label>
+                            <input type="file" class="form-control" id="logo" name="logo">
                             <br>
                         </div>
 
@@ -87,26 +76,26 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                     <div class="row">
 
                         <div class="col-xs-4 col-sm-4 col-md-4">
-                            <label>Nombre</label>
-                            <input name="nombre" id="nombre" type="text" 
+                            <label>Raz&oacute;n Social</label>
+                            <input name="rs" id="rs" type="text" 
                                    class="form-control" required
-                                   placeholder="Nombre">
-                            <br>
-                        </div>
-
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <label>Apellidos</label>
-                            <input name="apellidos" id="apellidos" type="text" 
-                                   class="form-control" required
-                                   placeholder="Apellidos">
+                                   value="<?= $data->razonSocial ?>">
                             <br>
                         </div>
 
                         <div class="col-xs-4 col-sm-4 col-md-4">
                             <label>E-mail</label>
-                            <input name="email" id="email" type="email" 
+                            <input name="email" id="emil" type="email" 
                                    class="form-control" required
-                                   placeholder="xxx@yyy.com">
+                                   value="<?= $data->email ?>">
+                            <br>
+                        </div>
+
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <label>Web</label>
+                            <input name="web" id="web" type="text" 
+                                   class="form-control" required
+                                   value="<?= $data->web ?>">
                             <br>
                         </div>
 
@@ -114,7 +103,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                     <br>
                     <br>
 
-                    <!--   Boton 'guardar usuario'  -->
+                    <!--   Boton 'guardar paciente'  -->
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6 col-xs-offset-6 col-sm-offset-6 col-md-offset-10">
                             <button type="submit" class="btn btn-primary">Guardar</button>

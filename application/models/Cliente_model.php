@@ -75,4 +75,19 @@ class Cliente_model extends CI_Model {
         
         return $query->row('nombre');
     }
+    
+    /**
+     * Función que actualiza a un cliente identificado por su id
+     * 
+     * @param int $id_cliente El id del cliente
+     * @param array $cliente Los datos del cliente que serán actualizados
+     * @return boolean TRUE si se ha actualizado / FALSE de lo contrario.
+     */
+    public function actualizarCliente($cliente, $id_cliente) {
+        
+        $this->db->where('id_cliente', $id_cliente);
+        $query = $this->db->update('cliente', $cliente);
+        
+        return $query;
+    }
 }
