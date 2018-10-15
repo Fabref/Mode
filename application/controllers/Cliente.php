@@ -20,7 +20,7 @@ class Cliente extends CI_Controller {
         /* Comprueba si ha expirado la session */
         if (empty($this->session->userdata("dniUsuario"))) {
 
-            $this->session->set_flashdata('mensajeLogin', $this->lang->line('msg_session_expirada'));
+            $this->session->set_flashdata('mensajeLogin', "La sesión ha expirado");
             $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ADVERTENCIA);
 
             redirect(site_url(), 'refresh');
@@ -109,7 +109,7 @@ class Cliente extends CI_Controller {
         $usuario['clave'] = password_hash($clave, PASSWORD_DEFAULT);
         $usuario['nombre'] = $this->input->post('nombreUsuario', TRUE);
         $usuario['apellidos'] = $this->input->post('apellidos', TRUE);
-        $usuario['email'] = $this->input->post('email', TRUE);
+        $usuario['email'] = $this->input->post('login', TRUE);
         $usuario['es_administrador'] = 1;
 
 
@@ -120,9 +120,10 @@ class Cliente extends CI_Controller {
         $config['allowed_types'] = 'jpg|png';
         $config['file_ext_tolower'] = TRUE;
         $config['remove_spaces'] = TRUE;
-        $config['max_size'] = 2048;
-        $config['max_width'] = 1920;
-        $config['max_height'] = 1280;
+        $config['encrypt_name'] = TRUE;
+        $config['max_size'] = 20048;
+        $config['max_width'] = 10920;
+        $config['max_height'] = 10280;
 
         /*
          * Carga de la libreria
@@ -134,30 +135,35 @@ class Cliente extends CI_Controller {
         /*
          * Carga de ficheros
          */
-        if (!$this->upload->do_upload($fichero)) {
-            $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ERROR);
-            $this->session->set_flashdata('mensaje', $this->upload->display_errors());
-            //echo $this->upload->display_errors();
-            redirect('Cliente/index/cvlc', 'refresh');
-            $cliente['logo'] = '';
+        if (!empty($fichero)) {
+            if (!$this->upload->do_upload($fichero)) {
+                $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ERROR);
+                $this->session->set_flashdata('mensaje', $this->upload->display_errors());
+                //echo $this->upload->display_errors();
+                redirect('Cliente/index/cvlc', 'refresh');
+                $cliente['logo'] = '';
+            } else {
+                $full_path = $this->upload->data();
+                $cliente['logo'] = $full_path['file_name'];
+
+                /*
+                 * Tratamiento de la imagen
+                 */
+                $config['image_library'] = 'gd2';
+                $config['source_image'] = $full_path['full_path'];
+                $config['new_image'] = './LogosClientes/thumbs/' . $full_path['file_name'];
+                $config['maintain_ratio'] = TRUE;
+                $config['width'] = 155;
+                $config['height'] = 100;
+
+                $this->load->library('image_lib', $config);
+
+                $this->image_lib->resize();
+            }
         } else {
-            $full_path = $this->upload->data();
-            $cliente['logo'] = $full_path['file_name'];
-
-            /*
-             * Tratamiento de la imagen
-             */
-            $config['image_library'] = 'gd2';
-            $config['source_image'] = $full_path['full_path'];
-            $config['new_image'] = './LogosClientes/thumbs/' . $full_path['file_name'];
-            $config['maintain_ratio'] = TRUE;
-            $config['width'] = 155;
-            $config['height'] = 100;
-
-            $this->load->library('image_lib', $config);
-
-            $this->image_lib->resize();
+            $cliente['logo'] = '';
         }
+
 
         $idcliente = $this->Cliente_model->insertarCliente($cliente);
 
@@ -185,7 +191,6 @@ class Cliente extends CI_Controller {
                 $this->session->set_flashdata('mensaje', "No se ha podido crear el usuario.<br>Ya existe un usuario con ese login en el sistema");
                 $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ERROR);
             }
-
         }
         redirect('Cliente/index/cvlc', 'refresh');
     }

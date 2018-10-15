@@ -40,12 +40,19 @@ class Login extends CI_Controller {
                 $this->comprobarLogin();
                 break;
 
+            case 'csesion': /* Cierra la sesion del usuario */
+                $this->cerrarSesion();
+
             default : /* Carga la pantalla del login de la APP */
-                $this->load->view('template/headerLogin');
-                $this->load->view('login/login');
-                $this->load->view('template/footerLogin');
+                $this->cargarIndex();
                 break;
         }
+    }
+
+    public function cargarIndex() {
+        $this->load->view('template/headerLogin');
+        $this->load->view('login/login');
+        $this->load->view('template/footerLogin');
     }
 
     /**
@@ -58,7 +65,7 @@ class Login extends CI_Controller {
         // Comprueba si existe el usuario, devolviendo su salt en caso de que exista
         $saltAdministrador = $this->Administrador_model->existeAdministrador($mail);
         $saltUsuario = $this->Usuario_model->existeUsuario($mail);
-       // echo $saltAdministrador . "<br>" . $saltUsuario;
+        // echo $saltAdministrador . "<br>" . $saltUsuario;
 
 
 
@@ -76,9 +83,9 @@ class Login extends CI_Controller {
 
             redirect('General/index/mp', 'refresh');
         } else if (isset($saltUsuario) && password_verify($pass, $saltUsuario)) {
-            
+
             $infoUsuario = $this->Usuario_model->getInfoUsuario($mail);
-            
+
             /* Se añade la info del usuario a variables de session */
             $this->session->set_userdata('idUsuario', $infoUsuario->id_usuario);
             $this->session->set_userdata('id_cliente', $infoUsuario->fk_cliente);
@@ -89,10 +96,10 @@ class Login extends CI_Controller {
             $this->session->set_userdata('es_administrador', $infoUsuario->es_administrador);
 //            $this->session->set_userdata('puede_editar', $infoUsuario->puede_editar);
 //            $this->session->set_userdata('puede_consultar', $infoUsuario->puede_consultar);
+            $this->session->set_userdata('dniUsuario', "11111111H");
             $this->session->set_userdata('mailUsuario', $mail);
-            
+
             redirect('Usuario/index/mp', 'refresh');
-            
         } else {
 //            $msg = "Usuario y/o password err&oacute;neos" . $mail . " " . $pass . " " . $saltUsuario;
             $msg = "Usuario y/o password err&oacute;neos";
@@ -107,9 +114,9 @@ class Login extends CI_Controller {
     public function cerrarSesion() {
         $this->session->sess_destroy();
 
-        //$msg = "La sesi&oacute;n ha finalizado";
-        $this->session->set_flashdata('mensajeLogin', "La sesi&oacute;n ha finalizado");
-        redirect('Login/index', 'refresh');
+        $msg = "Se ha cerrado la sesi&oacute;n";
+        $this->session->set_flashdata('mensajeErrorLogin', $msg);
+        redirect(site_url(), 'refresh');
     }
 
 }

@@ -16,7 +16,7 @@
 
         <!-- DNI -->
         <div class="form-group has-feedback">
-            <input type="email" id="mail" name="mail" class="form-control" placeholder="Email Usuario">
+            <input type="email" id="mail" name="mail" class="form-control" placeholder="Email">
             <span class="fa fa-at form-control-feedback"></span>
         </div>
         

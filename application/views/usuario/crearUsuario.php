@@ -48,7 +48,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                             <label>Login</label>
                             <input name="login" id="login" type="email" 
                                    class="form-control" required
-                                   value="<?= $data->login ?>">
+                                   value="<?php if (isset($login)) { echo $login; } ?>">
                             <br>
                         </div>
 
@@ -70,7 +70,8 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                 if (isset($clientes)) {
                                     foreach ($clientes as $cliente) {
                                         ?>
-                                        <option value="<?= $cliente->id_cliente ?>" <?php if ($data->fk_cliente == $cliente->id_cliente) { ?> selected="true" <?php } ?>><?= $cliente->nombre ?></option>
+                                        <option value="<?php echo $cliente->id_cliente ?>" <?php if ($this->session->userdata('id_cliente') == $cliente->id_cliente) { ?> selected="true" <?php } ?>><?php echo $cliente->nombre ?></option>
+                                        <!--<option value="<?php //$cliente->id_cliente ?>"><?php //$cliente->nombre ?></option>-->
                                         <?php
                                     }
                                 } else {
@@ -99,14 +100,6 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                             <input name="apellidos" id="apellidos" type="text" 
                                    class="form-control" required
                                    placeholder="Apellidos">
-                            <br>
-                        </div>
-
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <label>E-mail</label>
-                            <input name="email" id="email" type="email" 
-                                   class="form-control" required
-                                   placeholder="xxx@yyy.com">
                             <br>
                         </div>
 

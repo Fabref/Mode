@@ -100,7 +100,31 @@
                 "targets": [4]
             }
         ],
-        "pageLength": 10
+        "pageLength": 10,
+        "language": {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
     });
 
     /* Tabla Lista Campañas */
@@ -113,7 +137,31 @@
                 "targets": [4]
             }
         ],
-        "pageLength": 10
+        "pageLength": 10,
+        "language": {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
     });
 
     /* Tabla Lista Campañas */
@@ -126,13 +174,61 @@
                 "targets": [4]
             }
         ],
-        "pageLength": 10
+        "pageLength": 10,
+        "language": {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
     });
 
     /* Tabla Lineas Campaña */
     $("#tablaLineasCampanya").DataTable({
         "lengthChange": false,
-        "pageLength": 10
+        "pageLength": 10,
+        "language": {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
     });
     /* Tabla Aspectos Campaña */
     $("#tablaAspectosCampanya").DataTable({
@@ -143,89 +239,33 @@
                 "targets": [2]
             }
         ],
-        "pageLength": 10
+        "pageLength": 10,
+        "language": {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
     });
 
-
-    /* Tabla Lista Fisioterapeutas */
-//        $("#tablaFisioterapeutas").DataTable({
-//            "order": [[0, "asc"], [1, "asc"], [2, "asc"]],
-//            "lengthChange": false,
-//            "columnDefs": [
-//                {
-//                    "orderable": false,
-//                    "targets": [4]
-//                }
-//                ],
-//            "pageLength": 10
-//        });
-
-    /* Tabla Lista Fisioterapeutas Inactivos */
-//        $("#tablaFisioterapeutasInactivos").DataTable({
-//            "order": [[0, "asc"], [1, "asc"], [2, "asc"]],
-//            "lengthChange": false,
-//            "columnDefs": [
-//                {
-//                    "orderable": false,
-//                    "targets": [4]
-//                }
-//                ],
-//            "pageLength": 10
-//        });
-
-
-    /* Tabla Evolucion General Ejercicios Excentricos e Isometricos */
-//        $("#tablaEjerciciosDisponibles").DataTable({
-//            "order": [[0, "asc"], [1, "asc"], [2, "asc"]],
-//            "lengthChange": false,
-//            "columnDefs": [
-//                {
-//                    "targets": [0, 1, 2],
-//                    "visible": false
-//                }
-//            ],
-//            "pageLength": 10
-//        });
-
-    /* Tabla Facturas del Centro */
-//        $("#tablaFacturas").DataTable({
-//            "order": [[0, "desc"], [1, "desc"]],
-//            "lengthChange": false,
-//            "columnDefs": [
-//                {
-//                    "targets": [0, 1, 2],
-//                    "visible": true
-//                }
-//            ],
-//            "pageLength": 10
-//        });
-
-    /* Tabla Incidencias Abiertas */
-//        $("#tablaIncidenciasAbiertas").DataTable({
-//            "order": [[ 2, "desc" ], [ 0, "asc" ]], 
-//            "lengthChange": false,
-//            "columnDefs": [
-//                { 
-//                    "orderable": false, 
-//                    "targets": [3] 
-//                }],
-//            "pageLength": 10
-//        });
-
-    /* Tabla Incidencias Cerradas */
-//        $("#tablaIncidenciasCerradas").DataTable({
-//            "order": [[ 2, "desc" ], [ 1, "asc" ]], 
-//            "lengthChange": false,
-//            "columnDefs": [
-//                { 
-//                    "orderable": false, 
-//                    "targets": [4] 
-//                }],
-//            "pageLength": 10
-//        });
-
-
-    //  });
 
 
 </script>

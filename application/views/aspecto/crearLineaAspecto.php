@@ -91,7 +91,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
 
                 <!--   Boton 'guardar'  -->
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-xs-offset-6 col-sm-offset-6 col-md-offset-10">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-xs-offset-6 col-sm-offset-6 col-md-offset-8">
                         <input type="submit" class="btn btn-primary" id="enviar" name="enviar" value="Guardar">
                         <input type="submit" class="btn btn-warning" id="mas" name="mas" value="Guardar y añadir más">
                         <a class="btn btn-primary" href="javascript:window.history.back();">Volver</a>

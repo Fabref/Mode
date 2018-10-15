@@ -9,7 +9,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <?php echo $this->lang->line('msg_contacto'); ?>
+            Formulario de contacto
         </h1>
     </section>
 
@@ -24,7 +24,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                     <div class="box-header">
                         <i class="fa fa-envelope"></i>
 
-                        <h3 class="box-title"><?php echo $this->lang->line('msg_formulario_de_contacto'); ?></h3>
+                        <h3 class="box-title">Formulario de contacto</h3>
 
                     </div>
                     
@@ -68,52 +68,52 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                         echo form_open('General/index/envc', $attributes);
                                         ?>
                                         <fieldset>
-                                            <legend class="text-center header"><?php echo $this->lang->line('msg_contacte'); ?></legend>
+                                            <legend class="text-center header">Contacte con nosotros</legend>
 
                                             <div class="form-group">
                                                 <span class="col-md-1 col-md-offset-1 text-center"><i class="fa fa-user fa-3x"></i></span>
                                                 <div class="col-md-9">
-                                                    <input id="nombre" name="nombre" type="text" placeholder="<?php echo $this->lang->line('msg_nombre'); ?>" class="form-control" required>
+                                                    <input id="nombre" name="nombre" type="text" placeholder="Nombre" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <span class="col-md-1 col-md-offset-1 text-center"><i class="fa fa-user fa-3x"></i></span>
                                                 <div class="col-md-9">
-                                                    <input id="apellidos" name="apellidos" type="text" placeholder="<?php echo $this->lang->line('msg_apellidos'); ?>" class="form-control" required>
+                                                    <input id="apellidos" name="apellidos" type="text" placeholder="Apellidos" class="form-control" required>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <span class="col-md-1 col-md-offset-1 text-center"><i class="fa fa-envelope-o fa-3x"></i></span>
                                                 <div class="col-md-9">
-                                                    <input id="email" name="email" type="email" placeholder="<?php echo $this->lang->line('msg_email'); ?>" class="form-control" required>
+                                                    <input id="email" name="email" type="email" placeholder="Email" class="form-control" required>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <span class="col-md-1 col-md-offset-1 text-center"><i class="fa fa-phone-square fa-3x"></i></span>
                                                 <div class="col-md-9">
-                                                    <input id="telefono" name="telefono" type="text" placeholder="<?php echo $this->lang->line('msg_telefono'); ?>" class="form-control" required>
+                                                    <input id="telefono" name="telefono" type="text" placeholder="Telefono" class="form-control" required>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <span class="col-md-1 col-md-offset-1 text-center"><i class="fa fa-question fa-3x"></i></span>
                                                 <div class="col-md-9">
-                                                    <input id="asunto" name="asunto" type="text" placeholder="<?php echo $this->lang->line('msg_asunto'); ?>" class="form-control" required>
+                                                    <input id="asunto" name="asunto" type="text" placeholder="Asunto" class="form-control" required>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <span class="col-md-1 col-md-offset-1 text-center"><i class="fa fa-pencil-square-o fa-3x"></i></span>
                                                 <div class="col-md-9">
-                                                    <textarea class="form-control" id="mensaje" name="mensaje" placeholder="<?php echo $this->lang->line('msg_texto_consulta'); ?>" rows="7" required></textarea>
+                                                    <textarea class="form-control" id="mensaje" name="mensaje" placeholder="Mensaje" rows="7" required></textarea>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <div class="col-md-12 text-center">
-                                                    <button type="submit" class="btn btn-primary btn-lg"><?php echo $this->lang->line('btn_enviar'); ?></button>
+                                                    <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
                                                 </div>
                                             </div>
                                         </fieldset>

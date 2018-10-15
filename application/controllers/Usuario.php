@@ -21,7 +21,7 @@ class Usuario extends CI_Controller {
         /* Comprueba si ha expirado la session */
         if (empty($this->session->userdata("mailUsuario"))) {
 
-            $this->session->set_flashdata('mensajeLogin', $this->lang->line('msg_session_expirada'));
+            $this->session->set_flashdata('mensajeLogin', "La sesión ha expirado");
             $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ADVERTENCIA);
 
             redirect(site_url(), 'refresh');
@@ -116,12 +116,22 @@ class Usuario extends CI_Controller {
 //            redirect('Cliente/index/cvlc', 'refresh');
 //        }
 
-        if (!empty($this->session->userdata('loginUsuario'))) {
+//        if (!empty($this->session->userdata('loginUsuario'))) {
+//            $cliente = $this->Cliente_model->cargarCliente($this->session->userdata('id_cliente'));
+//            $data['cliente'] = $cliente;
+//            $data['login'] = $this->session->userdata('loginUsuario');
+//        } else {
+//            $data['clientes'] = $this->Cliente_model->getClientes();
+//        }
+        
+        if (!empty($this->session->userdata('id_cliente'))) {
             $cliente = $this->Cliente_model->cargarCliente($this->session->userdata('id_cliente'));
             $data['cliente'] = $cliente;
+            $data['login'] = $this->session->userdata('loginUsuario');
         } else {
             $data['clientes'] = $this->Cliente_model->getClientes();
         }
+        
 
         $this->load->view('template/menuSuperior');
         if (empty($this->session->userdata('loginUsuario'))) {
@@ -131,6 +141,7 @@ class Usuario extends CI_Controller {
         }
         $this->load->view('usuario/crearUsuario', $data);
         $this->load->view('template/footer');
+//        var_dump($data);
     }
 
     /**
@@ -145,7 +156,7 @@ class Usuario extends CI_Controller {
         $usuario['clave'] = password_hash($clave, PASSWORD_DEFAULT);
         $usuario['nombre'] = $this->input->post('nombre', TRUE);
         $usuario['apellidos'] = $this->input->post('apellidos', TRUE);
-        $usuario['email'] = $this->input->post('email', TRUE);
+        $usuario['email'] = $this->input->post('login', TRUE);
         $usuario['fk_cliente'] = $this->input->post('fk_cliente', TRUE);
 
         $usuario['es_administrador'] = 0;

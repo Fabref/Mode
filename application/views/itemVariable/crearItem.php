@@ -8,7 +8,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Formulario Nuevo Item Variable
+            Nueva pregunta
         </h1>
     </section>
 
@@ -61,26 +61,22 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                     <div class="row">
 
                         <!--   Campo Nombre   -->
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <label>Nombre del item</label>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <label>Codigo de pregunta</label>
                             <input name="nombre" id="nombre" type="text" 
                                    class="form-control">
                             <br>
                         </div>
 
                         <!--   Campo Descripcion   -->
-                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <label>Descripci&oacute;n</label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Descripcion"></textarea>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <label>Pregunta</label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="5" placeholder="Descripcion"></textarea>
                             <br>
                         </div>
-                    </div>
-
-                    <!-- Agrupacion Aspecto y Orden -->
-
-                    <div class="row">
+                        
                         <!-- Campo Partida -->
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="col-xs-4 col-sm-4 col-md-4">
                             <label>Aspecto</label>
                             <select class="form-control" id="fk_aspecto" name="fk_aspecto">
                                 <?php foreach ($aspectos as $aspecto) { ?>
@@ -88,18 +84,8 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                 <?php } ?>
                             </select>
                         </div>
-
-                        <!--   Campo Orden   -->
-<!--                        <div class="col-xs-6 col-sm-6 col-md-6">
-                            <label>Orden</label>
-
-                            <input name="orden" id="orden" type="text" 
-                                   class="form-control" required
-                                   placeholder="Orden">
-                            <br>
-                            <br>
-                        </div>-->
                     </div>
+
                 </div>
 
                 <br>
@@ -107,7 +93,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
 
                 <!--   Boton 'guardar'  -->
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-xs-offset-6 col-sm-offset-6 col-md-offset-10">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-xs-offset-6 col-sm-offset-6 col-md-offset-8">
                         <input type="submit" class="btn btn-primary" id="enviar" name="enviar" value="Guardar">
                         <input type="submit" class="btn btn-warning" id="mas" name="mas" value="Guardar y añadir más">
                         <a class="btn btn-primary" href="javascript:window.history.back();">Volver</a>

@@ -120,12 +120,17 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                                 <td><?php echo $campanya->nombre; ?></a></td>
                                                 <td><?php echo $campanya->fechaInicio; ?></a></td>
                                                 <td><?php echo $campanya->fechaFin; ?></a></td>
-                                                <td><a href="<?= base_url() ?>index.php/Campanya/index/selc/<?php echo $campanya->fk_cliente; ?>"><?php echo $clientes[$i]; ?></a></td>
+                                                <!--<td><a href="<?php // echo base_url()        ?>index.php/Campanya/index/selc/<?php //echo $campanya->fk_cliente;        ?>"><?php //echo $clientes[$i];        ?></a></td>-->
+                                                <td><?php echo $clientes[$i]; ?></td>
                                                 <td>
                                                     <?php if (empty($this->session->userdata('loginUsuario'))) { ?>
+
                                                         <a title="Ver Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvvc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-eye"></i></a>&nbsp;&nbsp;
                                                         <a title="Editar Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvec/<?php echo $campanya->id_campana; ?>"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;
-                                                        <?php
+                                                        <?php if ($this->session->userdata('superUser') == 1) { ?>
+                                                            <a title="Permisos Campa&ntilde;a" href="<?= base_url() ?>index.php/Campanya/index/cvpc/<?php echo $campanya->id_campana; ?>/<?php echo $campanya->fk_cliente; ?>"><i class="fa fa-users"></i></a>&nbsp;&nbsp;  
+                                                            <?php
+                                                        }
                                                     } else {
                                                         if ($this->session->userdata('es_administrador') == 1) {
                                                             ?>
@@ -148,35 +153,26 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                                     }
                                                     ?>  
 
-                                                    <?php //$url = base_url() . "index.php/Encuesta/index/cvce/" . $campanya->id_campana . "/" . $campanya->url;   ?>
+                                                    <?php //$url = base_url() . "index.php/Encuesta/index/cvce/" . $campanya->id_campana . "/" . $campanya->url;     ?>
                                                     <?php $url = "http://mode.sogres.es/index.php/Encuesta/index/cvce/" . $campanya->id_campana . "/" . $campanya->url; ?>
                                                     <a title="URL Campa&ntilde;a" data-toggle="modal" data-href="<?= $url ?>" data-target="#URL" href="#"><i class="fa fa-link"></i></a>&nbsp;&nbsp;
+
                                                     <?php
-                                                    switch ($campanya->estado) {
-                                                        case 2:
+                                                    if (empty($this->session->userdata('loginUsuario'))) {
+                                                        if ($campanya->estado == 3) {
                                                             ?>
-                                                            <i class="fa fa-unlock"></i></a>&nbsp;&nbsp;
-                                                            <?php
-                                                            break;
-                                                        case 3:
-                                                            ?>
-                                                            <i class="fa fa-lock"></i></a>&nbsp;&nbsp;
-                                                            <?php
-                                                            break;
-                                                        default:
-                                                            break;
-                                                    }
-                                                    ?>
-                                                    <?php if (empty($this->session->userdata('loginUsuario'))) { ?>
-                                                        <a title="Ver Resultados" href="<?= base_url() ?>index.php/Campanya/index/cvrc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-area-chart"></i></a>&nbsp;&nbsp;
+                                                            <a title="Ver Resultados" href="<?= base_url() ?>index.php/Campanya/index/cvrc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-area-chart"></i></a>&nbsp;&nbsp;
+                                                        <?php } ?>
                                                         <?php $urlEliminar1 = base_url() . "index.php/Campanya/index/cec/" . $campanya->id_campana . "/0"; ?>
                                                         <a title="Borrar campa&ntilde;a" data-toggle="modal" data-href="<?= $urlEliminar1 ?>" data-target="#confirm-delete" href="#"><i class="fa fa-trash"></i></a>
                                                         <?php
                                                     } else {
                                                         if ($this->Campanya_model->permisoLectura($this->session->userdata('idUsuario'), $campanya->id_campana) == 1) {
-                                                            ?> 
-                                                            <a title="Ver Resultados" href="<?= base_url() ?>index.php/Campanya/index/cvrc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-area-chart"></i></a>&nbsp;&nbsp;
-                                                            <?php
+                                                            if ($campanya->estado == 3) {
+                                                                ?> 
+                                                                <a title="Ver Resultados" href="<?= base_url() ?>index.php/Campanya/index/cvrc/<?php echo $campanya->id_campana; ?>"><i class="fa fa-area-chart"></i></a>&nbsp;&nbsp;
+                                                                <?php
+                                                            }
                                                         }
                                                         if ($this->Campanya_model->permisoEscritura($this->session->userdata('idUsuario'), $campanya->id_campana) == 1) {
                                                             ?>
@@ -184,6 +180,22 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                                             <a title="Borrar campa&ntilde;a" data-toggle="modal" data-href="<?= $urlEliminar1 ?>" data-target="#confirm-delete" href="#"><i class="fa fa-trash"></i></a>
                                                             <?php
                                                         }
+                                                    }
+                                                    ?>
+                                                    <?php
+                                                    switch ($campanya->estado) {
+                                                        case 2:
+                                                            ?>
+                                                            &nbsp;&nbsp;<i class="fa fa-unlock"></i></a>&nbsp;&nbsp;
+                                                            <?php
+                                                            break;
+                                                        case 3:
+                                                            ?>
+                                                            &nbsp;&nbsp;<i class="fa fa-lock"></i></a>&nbsp;&nbsp;
+                                                            <?php
+                                                            break;
+                                                        default:
+                                                            break;
                                                     }
                                                     ?>
                                                 </td>

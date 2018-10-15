@@ -19,7 +19,7 @@ class ItemVariable extends CI_Controller {
         /* Comprueba si ha expirado la session */
         if (empty($this->session->userdata("dniUsuario"))) {
 
-            $this->session->set_flashdata('mensajeLogin', $this->lang->line('msg_session_expirada'));
+            $this->session->set_flashdata('mensajeLogin', "La sesión ha expirado");
             $this->session->set_flashdata('tipoMensaje', MENSAJE_DE_ADVERTENCIA);
 
             redirect(site_url(), 'refresh');

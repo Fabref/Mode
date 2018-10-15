@@ -10,7 +10,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
         echo form_open('Encuesta/index/grc/' . $campanya->id_campana . "/" . $campanya->url, $attributes);
         ?>
         <span class="contact100-form-title">
-            Encuesta <?= $campanya->nombre ?>
+            <?= $campanya->nombre ?>
         </span>
 
         <?php
@@ -161,12 +161,13 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
         <!-- Items -->
         <?php
         if (sizeof($items) > 0) {
+            $i = 1;
             foreach ($items as $item) {
                 ?>
 
 
                 <div class="wrap-input100 bg1">
-                    <h4><?= $item->nombre ?></h4>
+                    <h5><?php echo $i . ".- "; ?><?= $item->descripcion ?></h5>
                     <div class="form-check form-check-inline">
                         <label class="form-check-label">
                             <input class="form-check-input" type="radio" name="<?php echo "IT_" . $item->id_item_variable; ?>" 
@@ -200,6 +201,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                 </div>
 
                 <?php
+                $i++;
             }
         }
         ?>

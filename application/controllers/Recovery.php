@@ -155,7 +155,7 @@ class Recovery extends CI_Controller {
 
         $this->email->from('recovery@kineactiv.com', "KineActiv");
         $this->email->to($infoUsuario->mail);
-        $this->email->subject($this->lang->line('msg_recuperacion_password'));
+        $this->email->subject("Recuperación del Password");
 
         $html = '<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#d2d6de">
             <table width="480" cellpadding="0" cellspacing="0" border="0" bgcolor="#d2d6de" align="center" style="margin:0 auto">
@@ -177,7 +177,7 @@ class Recovery extends CI_Controller {
                                         <br>
                                         
                                         <span style="font-weight:300;font-size:24px;letter-spacing:0.025em;line-height:23px;color:#009b82;font-family:\'Poppins\',sans-serif">
-                                            ' . $this->lang->line('msg_proceso_recuperacion') . '<br>
+                                             Proceso de recuperación <br>
                                         </span>
                                         
                                         <p>' . $this->lang->line('msg_inicio_recuperar_password') . '.</p>

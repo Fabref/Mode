@@ -119,6 +119,11 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                     <div class="row">
                         <div class="col-md-4 col-xs-12 col-sm-12">
                             <h2>Linea presupuestaria</h2>
+                            <?php if ($campanya->estado == 1) { ?>
+                            <a title="A&ntilde;adir nueva l&iacute;nea presupuestaria" href="<?= base_url() ?>index.php/LineaPresupuestaria/index/cvcl/<?php echo $campanya->id_campana; ?>" class="btn btn-primary">Añadir</a>&nbsp;&nbsp;        
+                            <?php } ?>
+                                <br>
+                                <br>
                             <?php if (sizeof($lineas) > 0) { ?>
                                 <table id="tablaLineasCampanya" class="table table-bordered table-striped">
                                     <thead>
@@ -147,12 +152,15 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                             <?php } ?>
                             <br>
                             <br>
-                            <?php if ($campanya->estado == 1) { ?>
-                                <a title="A&ntilde;adir nueva l&iacute;nea presupuestaria" href="<?= base_url() ?>index.php/LineaPresupuestaria/index/cvcl/<?php echo $campanya->id_campana; ?>"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;        
-                            <?php } ?>
+                            
                         </div>
                         <div class="col-md-4 col-xs-12 col-sm-12">
                             <h2>Aspectos</h2>
+                            <?php if ($campanya->estado == 1) { ?>
+                            <a title="A&ntilde;adir nuevo aspecto" href="<?= base_url() ?>index.php/Aspecto/index/cvca/<?php echo $campanya->id_campana; ?>" class="btn btn-primary">Añadir</a>&nbsp;&nbsp;
+                            <?php } ?>
+                                <br>
+                                <br>
                             <?php if (sizeof($aspectos) > 0) { ?>
                                 <table id="tablaAspectosCampanya" class="table table-bordered table-striped">
                                     <thead>
@@ -194,14 +202,16 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                             <?php } ?>
                             <br>
                             <br>
-                            <?php if ($campanya->estado == 1) { ?>
-                                <a title="A&ntilde;adir nuevo aspecto" href="<?= base_url() ?>index.php/Aspecto/index/cvca/<?php echo $campanya->id_campana; ?>"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;
-                            <?php } ?>
+                            
                             <button class="btn-primary">Importe: <?= $importeAspectos ?> &nbsp;&euro;</button>
                         </div>
                         <div class="col-md-4 col-xs-12 col-sm-12">
-                            <h2>Items Variables <small>Nombre - Aspecto</small></h2>
-
+                            <h2>Preguntas</h2>
+                            <?php if ($campanya->estado == 1) { ?>
+                                <a title="A&ntilde;adir nueva pregunta" href="<?= base_url() ?>index.php/ItemVariable/index/cvci/<?php echo $campanya->id_campana; ?>" class="btn btn-primary">Añadir</a>&nbsp;&nbsp;
+                            <?php } ?>
+                            <br>
+                            <br>
                             <?php if (sizeof($items) > 0) { ?>
 
                                 <?php echo form_open('ItemVariable/index/oi/' . $campanya->id_campana); ?>
@@ -216,7 +226,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                                 <i class="fa fa-ellipsis-v"></i>
                                             </span>
                                             <span id="nombreIT_<?php echo $item->nombre; ?>" class="text" style="width: 22em">
-                                                <?php echo $item->nombre; ?>&nbsp;-&nbsp;<?php echo $aspectoItem[$j]; ?>
+                                                <?php echo $item->nombre; ?>
                                             </span>
                                         </li>
                                         <?php
@@ -228,6 +238,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                 <!-- Boton Continuar -->
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-xs-offset-6 col-sm-offset-6 col-md-offset-6">
                                     <button type="submit" class="btn btn-primary pull-right">Ordenar</button> 
+                                    <?php echo form_close(); ?>
                                 </div>
                             <?php } else { ?>
                                 <div>
@@ -236,6 +247,7 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                             <?php } ?>
                             <br>
                             <br>
+
                         </div>
                     </div>
                     <br>
@@ -278,15 +290,6 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                         </div>
                     </div>
 
-                </div>
-
-                <div class = "row">
-                    <div class = "col-xs-6 col-sm-6 col-md-6 col-xs-offset-6 col-sm-offset-6 col-md-offset-10">
-                    <!--<a type = "submit" class = "btn btn-primary" href = "<?= base_url() ?>index.php/Campanya/index/cvec/<?= $idcampanya ?>">Volver</a> -->
-                        <a class = "btn btn-primary" href = "javascript:window.history.back();">Volver</a>
-                        <!--<input type = "submit" class = "btn btn-warning" id = "mas" name = "mas" value = "Guardar y añadir más"> -->
-                        <br>
-                    </div>
                 </div>
             </div><!--/.box-body -->
         </div><!--/.box -->

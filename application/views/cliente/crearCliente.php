@@ -151,13 +151,13 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                         </div>
 
                         <!--   Campo Email   -->
-                        <div class="col-xs-4 col-sm-4 col-md-4">
+<!--                        <div class="col-xs-4 col-sm-4 col-md-4">
                             <label>E-mail</label>
                             <input name="email" id="email" type="email" 
                                    class="form-control" required
                                    placeholder="xxx@yyy.com">
                             <br>
-                        </div>
+                        </div>-->
 
                     </div>
                     <br>

@@ -105,11 +105,12 @@ $tipoMensaje = $this->session->flashdata('tipoMensaje');
                                     foreach ($usuarios as $usuario) {
                                         ?>
                                         <tr class = "odd gradeX">
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $usuario->login; ?></a></td>
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $usuario->nombre; ?></a></td>
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $usuario->apellidos; ?></a></td>
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $usuario->email; ?></a></td>
-                                            <td><a href="<?= base_url() ?>index.php/Usuario/index/selc/<?php echo $usuario->id_usuario; ?>"><?php echo $this->Cliente_model->getNombreCliente($usuario->fk_cliente); ?></a></td>
+                                            <!--<td><a href="<?php //echo base_url() ?>index.php/Usuario/index/selc/<?php //echo $usuario->id_usuario; ?>"><?php //echo $usuario->login; ?></a></td>-->
+                                            <td><?php echo $usuario->login; ?></td>
+                                            <td><?php echo $usuario->nombre; ?></td>
+                                            <td><?php echo $usuario->apellidos; ?></td>
+                                            <td><?php echo $usuario->email; ?></td>
+                                            <td><?php echo $this->Cliente_model->getNombreCliente($usuario->fk_cliente); ?></td>
                                             <td><?php if ($usuario->es_administrador == 1) { ?>
                                                     <i class="fa fa-check"></i>
                                                 <?php } else { ?>
